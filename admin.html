@@ -55,12 +55,12 @@
       align-items: center;
       gap: .75rem;
     }
-    .header-logo {
-      font-family: var(--font-d);
-      font-size: 1.5rem;
-      font-weight: 400;
-      color: var(--gold-lt);
-      letter-spacing: .04em;
+    .admin-logo-img {
+      height: 34px;
+      width: auto;
+      display: block;
+      filter: invert(1);
+      mix-blend-mode: screen;
     }
     .header-admin-tag {
       background: var(--gold);
@@ -353,7 +353,7 @@
   <header class="admin-header">
     <div class="admin-header-inner">
       <div class="header-brand">
-        <span class="header-logo">Indaiá</span>
+        <img src="icons/logo-indaia.jpg" alt="Indaiá" class="admin-logo-img">
         <span class="header-admin-tag">ADMIN</span>
       </div>
       <button id="logout-btn" class="logout-btn" hidden>Sair</button>
