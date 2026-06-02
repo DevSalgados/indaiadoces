@@ -29,8 +29,16 @@ module.exports = async function handler(req, res) {
   const API    = `https://api.github.com/repos/${REPO}/contents`;
   const GH     = { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
 
+  function ghFetch(url, opts = {}) {
+    const ctrl = new AbortController();
+    const tid  = setTimeout(() => ctrl.abort(), 8000);
+    return fetch(url, { ...opts, signal: ctrl.signal })
+      .then(r => { clearTimeout(tid); return r; })
+      .catch(e => { clearTimeout(tid); throw e.name === 'AbortError' ? new Error('GitHub timeout') : e; });
+  }
+
   async function ghGet(path) {
-    const r = await fetch(`${API}/${path}?ref=${BRANCH}`, { headers: GH });
+    const r = await ghFetch(`${API}/${path}?ref=${BRANCH}`, { headers: GH });
     if (r.status === 404) return null;
     if (!r.ok) throw new Error(`GitHub erro ${r.status}`);
     return r.json();
@@ -39,7 +47,7 @@ module.exports = async function handler(req, res) {
   async function ghPut(path, content, sha, message) {
     const body = { message, content, branch: BRANCH };
     if (sha) body.sha = sha;
-    const r = await fetch(`${API}/${path}`, { method: 'PUT', headers: GH, body: JSON.stringify(body) });
+    const r = await ghFetch(`${API}/${path}`, { method: 'PUT', headers: GH, body: JSON.stringify(body) });
     if (!r.ok) {
       const e = await r.json().catch(() => ({}));
       throw new Error(e.message || `GitHub erro ${r.status}`);

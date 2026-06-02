@@ -238,5 +238,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('save-btn').addEventListener('click', save);
   document.getElementById('logout-btn').addEventListener('click', logout);
 
-  if (getPassword()) login();
+  if (getPassword()) {
+    document.getElementById('token-input').value = getPassword();
+    login();
+  }
 });
