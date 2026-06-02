@@ -11,7 +11,14 @@ const pending    = {}; // id -> base64  |  id+'_preview' -> objectURL
 function getToken() { return sessionStorage.getItem('gh_token') || ''; }
 
 /* ── GitHub API ───────────────────────────────────────────────── */
-function ghHeaders() {
+function ghReadHeaders() {
+  return {
+    Authorization: `token ${getToken()}`,
+    Accept: 'application/vnd.github.v3+json',
+  };
+}
+
+function ghWriteHeaders() {
   return {
     Authorization: `token ${getToken()}`,
     Accept: 'application/vnd.github.v3+json',
@@ -19,22 +26,33 @@ function ghHeaders() {
   };
 }
 
+function fetchTimeout(url, opts, ms = 12000) {
+  const ctrl = new AbortController();
+  const tid  = setTimeout(() => ctrl.abort(), ms);
+  return fetch(url, { ...opts, signal: ctrl.signal })
+    .then(r => { clearTimeout(tid); return r; })
+    .catch(e => { clearTimeout(tid); throw e.name === 'AbortError' ? new Error('Tempo limite esgotado — verifique sua conexão e tente novamente.') : e; });
+}
+
 async function ghGet(path) {
-  const res = await fetch(`${API}/${path}?ref=${BRANCH}`, { headers: ghHeaders() });
+  const res = await fetchTimeout(
+    `${API}/${path}?ref=${BRANCH}`,
+    { headers: ghReadHeaders() }
+  );
   if (res.status === 404) return null;
-  if (res.status === 401) throw new Error('Token inválido ou sem permissão de acesso ao repositório.');
-  if (!res.ok) throw new Error(`GitHub erro ${res.status}`);
+  if (res.status === 401) throw new Error('Token inválido ou expirado. Gere um novo token no GitHub.');
+  if (!res.ok) throw new Error(`GitHub erro ${res.status} — tente novamente.`);
   return res.json();
 }
 
 async function ghPut(path, b64, sha, msg) {
   const body = { message: msg, content: b64, branch: BRANCH };
   if (sha) body.sha = sha;
-  const res = await fetch(`${API}/${path}`, {
-    method: 'PUT',
-    headers: ghHeaders(),
-    body: JSON.stringify(body),
-  });
+  const res = await fetchTimeout(
+    `${API}/${path}`,
+    { method: 'PUT', headers: ghWriteHeaders(), body: JSON.stringify(body) },
+    30000
+  );
   if (!res.ok) {
     const e = await res.json().catch(() => ({}));
     throw new Error(e.message || `GitHub erro ${res.status}`);
