@@ -368,24 +368,10 @@
       <p>Acesse com seu token do GitHub para gerenciar as fotos dos produtos.</p>
 
       <div class="auth-form">
-        <label for="token-input">GitHub Personal Access Token</label>
-        <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" spellcheck="false">
+        <label for="token-input">Senha do Painel</label>
+        <input type="password" id="token-input" placeholder="Digite sua senha" autocomplete="current-password" spellcheck="false">
         <p id="auth-error" class="auth-error" hidden></p>
         <button id="login-btn" class="btn-login">Entrar</button>
-      </div>
-
-      <div class="auth-help">
-        <p>Como gerar o token:</p>
-        <ol>
-          <li>Acesse <strong>github.com</strong> → clique na sua foto → <strong>Settings</strong></li>
-          <li>Role até <strong>Developer settings</strong> → <strong>Personal access tokens</strong> → <strong>Tokens (classic)</strong></li>
-          <li>Clique em <strong>Generate new token (classic)</strong></li>
-          <li>Em <em>Select scopes</em>, marque <strong>repo</strong></li>
-          <li>Clique em <strong>Generate token</strong> e copie o código</li>
-        </ol>
-        <a href="https://github.com/settings/tokens/new?scopes=repo&description=Indaia+Admin" target="_blank" rel="noopener">
-          → Gerar token agora (abre o GitHub)
-        </a>
       </div>
     </div>
   </div>
