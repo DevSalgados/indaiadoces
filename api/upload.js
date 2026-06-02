@@ -12,9 +12,11 @@ module.exports = async function handler(req, res) {
   const adminPw = process.env.ADMIN_PASSWORD;
   const token   = process.env.GITHUB_TOKEN;
 
+  console.log('ENV CHECK — ADMIN_PASSWORD:', adminPw ? 'OK' : 'MISSING', '| GITHUB_TOKEN:', token ? 'OK' : 'MISSING');
+
   if (!adminPw || !token) {
     return res.status(500).json({
-      error: 'Servidor não configurado. Defina ADMIN_PASSWORD e GITHUB_TOKEN nas variáveis de ambiente do Vercel.',
+      error: `Configuração incompleta — ADMIN_PASSWORD: ${adminPw ? 'OK' : 'FALTANDO'}, GITHUB_TOKEN: ${token ? 'OK' : 'FALTANDO'}`,
     });
   }
 
