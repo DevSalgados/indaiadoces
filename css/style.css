@@ -232,9 +232,10 @@ ul, ol { list-style: none; }
   flex-direction: column;
   line-height: 1;
   flex-shrink: 0;
+  align-items: flex-start;
 }
 .logo-img {
-  height: 44px;
+  height: 40px;
   width: auto;
   display: block;
   filter: invert(1);
@@ -242,6 +243,7 @@ ul, ol { list-style: none; }
 
 .footer-logo-img {
   filter: none;
+  height: 52px;
 }
 
 .nav {
