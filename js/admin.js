@@ -96,7 +96,8 @@ function renderGrid() {
 
     return `
       <div class="admin-card" data-id="${p.id}">
-        <label class="admin-card-visual" title="Clique para selecionar foto">
+        <div class="admin-card-visual" role="button" tabindex="0"
+             title="${previewSrc ? 'Trocar foto' : 'Adicionar foto'}">
           ${previewSrc
             ? `<img src="${previewSrc}" alt="${p.name}" class="admin-card-img">`
             : `<div class="admin-card-placeholder" style="background:${p.gradient}">${p.icon}</div>`
@@ -109,8 +110,9 @@ function renderGrid() {
             </svg>
             <span>${previewSrc ? 'Trocar foto' : 'Adicionar foto'}</span>
           </div>
-          <input type="file" accept="image/*" class="file-input" data-id="${p.id}" hidden>
-        </label>
+          <input type="file" accept="image/*" class="file-input"
+                 data-id="${p.id}" style="display:none">
+        </div>
         <div class="admin-card-info">
           ${badge}
           <p class="admin-card-name">${p.name}</p>
@@ -120,13 +122,26 @@ function renderGrid() {
     `;
   }).join('');
 
+  // Click on visual → open file dialog programmatically (mais confiável que label+hidden)
+  grid.querySelectorAll('.admin-card-visual').forEach(visual => {
+    visual.addEventListener('click', () => {
+      visual.querySelector('.file-input').click();
+    });
+    visual.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        visual.querySelector('.file-input').click();
+      }
+    });
+  });
+
   grid.querySelectorAll('.file-input').forEach(input => {
     input.addEventListener('change', async e => {
       const file = e.target.files[0];
       if (!file) return;
       const id   = +input.dataset.id;
       const card = grid.querySelector(`.admin-card[data-id="${id}"]`);
-      card.classList.add('loading');
+      if (card) card.classList.add('loading');
       try {
         const b64 = await compressImage(file);
         if (pending[id + '_preview']) URL.revokeObjectURL(pending[id + '_preview']);
@@ -136,8 +151,6 @@ function renderGrid() {
         updateSaveBtn();
       } catch (err) {
         showStatus(`Erro ao processar imagem: ${err.message}`, 'error');
-      } finally {
-        card.classList.remove('loading');
       }
     });
   });
