@@ -237,12 +237,11 @@ ul, ol { list-style: none; }
   height: 44px;
   width: auto;
   display: block;
-  mix-blend-mode: multiply;
+  filter: invert(1);
 }
 
 .footer-logo-img {
-  filter: invert(1);
-  mix-blend-mode: screen;
+  filter: none;
 }
 
 .nav {
