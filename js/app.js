@@ -201,6 +201,10 @@ function renderCard(p, isSelected) {
 
   const btnLabel = isSelected ? '✓ Adicionado' : '♥ Tenho interesse';
 
+  const visualContent = p.imageUrl
+    ? `<img src="${p.imageUrl}" alt="${p.name}" class="card-img" loading="lazy">`
+    : `<div class="card-visual-overlay"></div><div class="card-visual-icon">${p.icon}</div>`;
+
   return `
     <article
       class="product-card"
@@ -208,9 +212,8 @@ function renderCard(p, isSelected) {
       tabindex="0"
       aria-label="${p.name} — clique para ver detalhes"
     >
-      <div class="card-visual" style="background:${p.gradient}" aria-hidden="true">
-        <div class="card-visual-overlay"></div>
-        <div class="card-visual-icon">${p.icon}</div>
+      <div class="card-visual" style="${p.imageUrl ? '' : 'background:' + p.gradient}" aria-hidden="true">
+        ${visualContent}
         <div class="card-selected-indicator ${isSelected ? 'visible' : ''}" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="currentColor"/>
@@ -304,8 +307,13 @@ function openModal(id) {
   const tagClass = TAG_CLASS[p.tagType] || 'tag-classic';
 
   // Populate
-  DOM.modalVisual.style.background = p.gradient;
-  DOM.modalVisual.innerHTML = `<div style="font-size:4.5rem;filter:drop-shadow(0 8px 24px rgba(0,0,0,.2))">${p.icon}</div>`;
+  if (p.imageUrl) {
+    DOM.modalVisual.style.background = '';
+    DOM.modalVisual.innerHTML = `<img src="${p.imageUrl}" alt="${p.name}" class="modal-img">`;
+  } else {
+    DOM.modalVisual.style.background = p.gradient;
+    DOM.modalVisual.innerHTML = `<div style="font-size:4.5rem;filter:drop-shadow(0 8px 24px rgba(0,0,0,.2))">${p.icon}</div>`;
+  }
   DOM.modalCategory.textContent = p.categoryLabel;
   DOM.modalTag.className   = `card-tag ${tagClass}`;
   DOM.modalTag.textContent = p.tag;
@@ -380,7 +388,9 @@ function renderDrawerItems() {
 
   DOM.drawerItems.innerHTML = items.map(p => `
     <div class="drawer-item" data-id="${p.id}">
-      <div class="drawer-item-visual" style="background:${p.gradient}" aria-hidden="true">${p.icon}</div>
+      <div class="drawer-item-visual" ${p.imageUrl ? '' : `style="background:${p.gradient}"`} aria-hidden="true">
+        ${p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">` : p.icon}
+      </div>
       <div class="drawer-item-info">
         <p class="drawer-item-name">${p.name}</p>
         <p class="drawer-item-cat">${p.categoryLabel}</p>
@@ -658,4 +668,12 @@ function init() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', () => {
+  fetch('js/images.json')
+    .then(r => r.ok ? r.json() : {})
+    .catch(() => ({}))
+    .then(images => {
+      PRODUCTS.forEach(p => { if (images[p.id]) p.imageUrl = images[p.id]; });
+      init();
+    });
+});

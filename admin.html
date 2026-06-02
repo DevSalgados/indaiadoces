@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Indaiá Doces Finos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brown:    #4A2C1A;
+      --cream:    #FAF7F2;
+      --gold:     #C9A86E;
+      --gold-lt:  #E8D5B0;
+      --border:   #E2D8CF;
+      --muted:    #9A8070;
+      --green:    #2d7a4f;
+      --red:      #b93030;
+      --blue:     #1a5fb4;
+      --font-d:   'Cormorant Garamond', Georgia, serif;
+      --font-b:   'Lato', sans-serif;
+      --r:        12px;
+    }
+
+    body {
+      font-family: var(--font-b);
+      background: #f0ece6;
+      color: var(--brown);
+      min-height: 100vh;
+    }
+
+    /* ── Header ─────────────────────────────────────────────── */
+    .admin-header {
+      background: var(--brown);
+      padding: 0 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,.18);
+    }
+    .admin-header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .header-logo {
+      font-family: var(--font-d);
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--gold-lt);
+      letter-spacing: .04em;
+    }
+    .header-admin-tag {
+      background: var(--gold);
+      color: var(--brown);
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      padding: .2em .55em;
+      border-radius: 4px;
+    }
+    .logout-btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.25);
+      color: rgba(255,255,255,.75);
+      font-family: var(--font-b);
+      font-size: .8rem;
+      padding: .4rem .9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .logout-btn:hover { background: rgba(255,255,255,.1); color: #fff; }
+
+    /* ── Status bar ─────────────────────────────────────────── */
+    .status-bar {
+      padding: .75rem 1.5rem;
+      font-size: .85rem;
+      font-weight: 400;
+      text-align: center;
+    }
+    .status-info    { background: #dbeafe; color: #1e40af; }
+    .status-success { background: #dcfce7; color: #166534; }
+    .status-error   { background: #fee2e2; color: #991b1b; }
+
+    /* ── Auth screen ─────────────────────────────────────────── */
+    .auth-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 60px);
+      padding: 2rem 1rem;
+    }
+    .auth-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 8px 40px rgba(74,44,26,.1);
+    }
+    .auth-card h1 {
+      font-family: var(--font-d);
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: .4rem;
+    }
+    .auth-card > p {
+      color: var(--muted);
+      font-size: .9rem;
+      margin-bottom: 1.75rem;
+    }
+    .auth-form label {
+      display: block;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .4rem;
+    }
+    .auth-form input {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: .7rem .9rem;
+      font-family: monospace;
+      font-size: .9rem;
+      color: var(--brown);
+      background: var(--cream);
+      outline: none;
+      transition: border-color .2s;
+      margin-bottom: 1rem;
+    }
+    .auth-form input:focus { border-color: var(--gold); }
+    .auth-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border-radius: 6px;
+      padding: .6rem .9rem;
+      font-size: .82rem;
+      margin-bottom: 1rem;
+    }
+    .btn-login {
+      width: 100%;
+      background: var(--brown);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: .8rem;
+      font-family: var(--font-b);
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-login:hover { background: #6b3d24; }
+    .btn-login:disabled { opacity: .6; cursor: not-allowed; }
+
+    .auth-help {
+      margin-top: 1.75rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .auth-help > p {
+      font-size: .78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--muted);
+      margin-bottom: .6rem;
+    }
+    .auth-help ol {
+      padding-left: 1.2rem;
+      color: var(--muted);
+      font-size: .82rem;
+      line-height: 1.7;
+    }
+    .auth-help ol strong { color: var(--brown); }
+    .auth-help a {
+      color: var(--brown);
+      font-weight: 700;
+      font-size: .82rem;
+      display: inline-block;
+      margin-top: .75rem;
+    }
+
+    /* ── Main content ────────────────────────────────────────── */
+    .admin-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+    .admin-toolbar {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .toolbar-title {
+      font-family: var(--font-d);
+      font-size: 2rem;
+      font-weight: 400;
+    }
+    .toolbar-sub {
+      color: var(--muted);
+      font-size: .85rem;
+      margin-top: .2rem;
+    }
+
+    .save-btn {
+      background: var(--brown);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: .75rem 1.5rem;
+      font-family: var(--font-b);
+      font-size: .88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      white-space: nowrap;
+    }
+    .save-btn:hover { background: #6b3d24; }
+    .save-btn:disabled { opacity: .5; cursor: not-allowed; transform: none !important; }
+    .save-btn.has-changes {
+      background: var(--green);
+      box-shadow: 0 4px 16px rgba(45,122,79,.3);
+      animation: pulse-green 2s infinite;
+    }
+    @keyframes pulse-green {
+      0%, 100% { box-shadow: 0 4px 16px rgba(45,122,79,.3); }
+      50%       { box-shadow: 0 4px 24px rgba(45,122,79,.55); }
+    }
+
+    /* ── Product grid ────────────────────────────────────────── */
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 1rem;
+      transition: opacity .3s;
+    }
+
+    /* ── Admin card ──────────────────────────────────────────── */
+    .admin-card {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+      transition: box-shadow .2s, border-color .2s, transform .2s;
+    }
+    .admin-card:hover {
+      box-shadow: 0 6px 24px rgba(74,44,26,.12);
+      border-color: var(--gold);
+      transform: translateY(-3px);
+    }
+    .admin-card.loading { opacity: .5; pointer-events: none; }
+
+    .admin-card-visual {
+      display: block;
+      aspect-ratio: 1 / 1;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .admin-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .admin-card-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+    .admin-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(44,26,16,.55);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+      opacity: 0;
+      transition: opacity .2s;
+      color: #fff;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+    .admin-card-visual:hover .admin-card-overlay { opacity: 1; }
+
+    .admin-card-info {
+      padding: .65rem .75rem .75rem;
+    }
+    .admin-card-name {
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--brown);
+      line-height: 1.3;
+      margin-bottom: .15rem;
+    }
+    .admin-card-cat {
+      font-size: .73rem;
+      color: var(--muted);
+    }
+
+    /* ── Badges ──────────────────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      padding: .2em .55em;
+      border-radius: 4px;
+      margin-bottom: .35rem;
+    }
+    .badge-pending { background: #fef9c3; color: #854d0e; }
+    .badge-saved   { background: #dcfce7; color: #166534; }
+    .badge-none    { background: #f1f5f9; color: #64748b; }
+
+    /* ── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .admin-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+      .admin-toolbar { flex-direction: column; align-items: flex-start; }
+      .save-btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="admin-header">
+    <div class="admin-header-inner">
+      <div class="header-brand">
+        <span class="header-logo">Indaiá</span>
+        <span class="header-admin-tag">ADMIN</span>
+      </div>
+      <button id="logout-btn" class="logout-btn" hidden>Sair</button>
+    </div>
+  </header>
+
+  <div id="status-bar" class="status-bar" hidden></div>
+
+  <!-- ── Auth ──────────────────────────────────────────────── -->
+  <div id="auth-screen" class="auth-screen">
+    <div class="auth-card">
+      <h1>Painel Administrativo</h1>
+      <p>Acesse com seu token do GitHub para gerenciar as fotos dos produtos.</p>
+
+      <div class="auth-form">
+        <label for="token-input">GitHub Personal Access Token</label>
+        <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" spellcheck="false">
+        <p id="auth-error" class="auth-error" hidden></p>
+        <button id="login-btn" class="btn-login">Entrar</button>
+      </div>
+
+      <div class="auth-help">
+        <p>Como gerar o token:</p>
+        <ol>
+          <li>Acesse <strong>github.com</strong> → clique na sua foto → <strong>Settings</strong></li>
+          <li>Role até <strong>Developer settings</strong> → <strong>Personal access tokens</strong> → <strong>Tokens (classic)</strong></li>
+          <li>Clique em <strong>Generate new token (classic)</strong></li>
+          <li>Em <em>Select scopes</em>, marque <strong>repo</strong></li>
+          <li>Clique em <strong>Generate token</strong> e copie o código</li>
+        </ol>
+        <a href="https://github.com/settings/tokens/new?scopes=repo&description=Indaia+Admin" target="_blank" rel="noopener">
+          → Gerar token agora (abre o GitHub)
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Main ──────────────────────────────────────────────── -->
+  <main id="main-content" hidden>
+    <div class="admin-container">
+      <div class="admin-toolbar">
+        <div>
+          <h2 class="toolbar-title">Fotos dos Produtos</h2>
+          <p class="toolbar-sub">Clique em qualquer produto para adicionar ou trocar a foto — depois clique em Publicar</p>
+        </div>
+        <button id="save-btn" class="save-btn">Publicar alterações</button>
+      </div>
+
+      <div id="product-grid" class="admin-grid"></div>
+    </div>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
