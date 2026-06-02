@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Indaiá Doces Finos — Confeitaria artesanal premium para eventos, casamentos e celebrações especiais. Bombons, brigadeiros gourmet, copinhos, tartelettes e muito mais.">
+  <meta property="og:title" content="Indaiá Doces Finos">
+  <meta property="og:description" content="Confeitaria artesanal premium para eventos e celebrações especiais.">
+  <meta name="theme-color" content="#4A2C1A">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Indaiá">
+  <meta property="og:image" content="icons/icon.svg">
+  <title>Indaiá Doces Finos</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════ HEADER ═══ -->
+  <header id="header" class="header">
+    <div class="container header-inner">
+      <a href="#inicio" class="logo" aria-label="Indaiá Doces Finos — Página inicial">
+        <span class="logo-main">Indaiá</span>
+        <span class="logo-sub">Doces Finos</span>
+      </a>
+
+      <nav class="nav" aria-label="Navegação principal">
+        <a href="#inicio"      class="nav-link">Início</a>
+        <a href="#produtos"    class="nav-link">Produtos</a>
+        <a href="#destaques"   class="nav-link">Destaques</a>
+        <a href="#duvidas"     class="nav-link">Dúvidas</a>
+        <a href="#orcamento"   class="nav-link">Orçamento</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="btn-selection-header" id="btn-selection-header" onclick="App.openDrawer()" aria-label="Ver minha seleção de doces">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          Minha seleção
+          <span class="selection-badge" id="header-count">0</span>
+        </button>
+
+        <a href="#" id="btn-whatsapp-header" class="btn-whatsapp" target="_blank" rel="noopener noreferrer" aria-label="Abrir WhatsApp para solicitar orçamento">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+          </svg>
+          WhatsApp
+        </a>
+
+        <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-nav">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav -->
+  <div id="mobile-nav" class="mobile-nav" role="dialog" aria-label="Menu de navegação">
+    <div class="mobile-nav-panel">
+      <a href="#inicio"    class="mobile-nav-link" onclick="App.closeMenu()">Início</a>
+      <a href="#produtos"  class="mobile-nav-link" onclick="App.closeMenu()">Produtos</a>
+      <a href="#destaques" class="mobile-nav-link" onclick="App.closeMenu()">Destaques</a>
+      <a href="#duvidas"   class="mobile-nav-link" onclick="App.closeMenu()">Dúvidas</a>
+      <a href="#orcamento" class="mobile-nav-link" onclick="App.closeMenu()">Orçamento</a>
+      <div class="mobile-nav-actions">
+        <button class="btn-primary btn-full" onclick="App.openDrawer(); App.closeMenu();">
+          Ver minha seleção
+        </button>
+        <a id="mobile-nav-whatsapp" href="#" class="btn-whatsapp btn-full" target="_blank" rel="noopener noreferrer" onclick="App.closeMenu()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+          </svg>
+          Falar no WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <!-- ════════════════════════════════════════════════════ HERO ═════ -->
+    <section id="inicio" class="hero" aria-labelledby="hero-title">
+      <div class="container hero-inner">
+        <div class="hero-content">
+          <span class="hero-label">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            Confeitaria Artesanal Premium
+          </span>
+
+          <h1 class="hero-title" id="hero-title">
+            Doces finos para transformar cada momento em experiência.
+          </h1>
+
+          <p class="hero-subtitle">
+            Uma seleção artesanal de sabores clássicos, autorais e sofisticados para eventos, presentes e celebrações especiais.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#produtos" class="btn-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+              </svg>
+              Ver catálogo
+            </a>
+            <a href="#orcamento" class="btn-secondary">Solicitar orçamento</a>
+          </div>
+
+          <div class="hero-badges" aria-label="Diferenciais">
+            <span class="badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              Ingredientes selecionados
+            </span>
+            <span class="badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/><path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"/><path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/><path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"/><path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"/></svg>
+              Produção artesanal
+            </span>
+            <span class="badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              Apresentação premium
+            </span>
+            <span class="badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Ideal para eventos
+            </span>
+          </div>
+        </div>
+
+        <!-- Hero Visual — placeholders com gradientes artesanais -->
+        <div class="hero-visual" aria-hidden="true">
+          <div class="hero-card">
+            <div class="hero-card-inner" style="background: linear-gradient(145deg, #F0E0D0 0%, #C4906A 50%, #7A4020 100%);">
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:5rem;filter:drop-shadow(0 8px 24px rgba(0,0,0,.2))">🍫</div>
+              <div class="hero-card-label">Brigadeiro Belga</div>
+            </div>
+          </div>
+          <div class="hero-card">
+            <div class="hero-card-inner" style="background: linear-gradient(145deg, #EBF0E0 0%, #B8C89A 50%, #6A8040 100%);">
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3.5rem;filter:drop-shadow(0 8px 24px rgba(0,0,0,.15))">🌿</div>
+              <div class="hero-card-label">Pistache</div>
+            </div>
+          </div>
+          <div class="hero-card">
+            <div class="hero-card-inner" style="background: linear-gradient(145deg, #EED8EC 0%, #A060B8 50%, #683090 100%);">
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3.5rem;filter:drop-shadow(0 8px 24px rgba(0,0,0,.15))">🫐</div>
+              <div class="hero-card-label">Tartelette Bosque</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ EXPERIENCE ════ -->
+    <section id="experiencia" class="experience" aria-labelledby="exp-title">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Nossa essência</span>
+          <h2 class="section-title" id="exp-title">Mais do que doces,<br>uma experiência à mesa.</h2>
+        </div>
+
+        <div class="experience-grid">
+          <article class="experience-card reveal reveal-delay-1">
+            <div class="experience-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+            </div>
+            <h3>Sabor artesanal</h3>
+            <p>Cada doce é preparado com ingredientes criteriosamente selecionados, preservando técnicas da confeitaria clássica com toque contemporâneo e autoral.</p>
+          </article>
+
+          <article class="experience-card reveal reveal-delay-2">
+            <div class="experience-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/><path d="M8 12s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
+              </svg>
+            </div>
+            <h3>Apresentação sofisticada</h3>
+            <p>Visual pensado para encantar. Cada peça é cuidadosamente finalizada para compor mesas de eventos com elegância, harmonia e impacto visual.</p>
+          </article>
+
+          <article class="experience-card reveal reveal-delay-3">
+            <div class="experience-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+                <line x1="12" y1="12" x2="12.01" y2="12"/>
+              </svg>
+            </div>
+            <h3>Variedade para celebrar</h3>
+            <p>Do clássico ao autoral, nossa seleção contempla diferentes perfis e estilos para se adaptar a qualquer celebração especial com personalidade.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ CATÁLOGO ══════ -->
+    <section id="produtos" class="catalog" aria-labelledby="catalog-title">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Catálogo completo</span>
+          <h2 class="section-title" id="catalog-title">Nossos doces finos</h2>
+          <p class="section-subtitle">Explore a seleção completa, filtre por categoria e monte sua combinação ideal</p>
+        </div>
+
+        <!-- Controls -->
+        <div class="catalog-controls">
+          <!-- Search -->
+          <div class="search-wrapper">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input
+              type="search"
+              id="search-input"
+              class="search-input"
+              placeholder="Buscar por nome ou ingrediente..."
+              aria-label="Buscar produtos"
+              autocomplete="off"
+            >
+            <button class="search-clear" id="search-clear" aria-label="Limpar busca" hidden>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <!-- Category filters -->
+          <div class="filter-row" role="group" aria-label="Filtrar por categoria">
+            <span class="filter-row-label" aria-hidden="true">Categoria</span>
+            <button class="filter-chip active" data-category="all" aria-pressed="true">Todos</button>
+            <button class="filter-chip" data-category="bombons" aria-pressed="false">Bombons</button>
+            <button class="filter-chip" data-category="brigadeiros" aria-pressed="false">Brigadeiros</button>
+            <button class="filter-chip" data-category="classicos" aria-pressed="false">Clássicos</button>
+            <button class="filter-chip" data-category="copinhos" aria-pressed="false">Copinhos</button>
+            <button class="filter-chip" data-category="mini-sobremesas" aria-pressed="false">Mini Sobremesas</button>
+            <button class="filter-chip" data-category="palhas-italianas" aria-pressed="false">Palhas Italianas</button>
+            <button class="filter-chip" data-category="tartelettes" aria-pressed="false">Tartelettes</button>
+          </div>
+
+          <!-- Profile filters -->
+          <div class="filter-row" role="group" aria-label="Filtrar por perfil">
+            <span class="filter-row-label" aria-hidden="true">Perfil</span>
+            <button class="filter-chip" data-profile="chocolate" aria-pressed="false">Chocolate</button>
+            <button class="filter-chip" data-profile="frutas" aria-pressed="false">Frutas</button>
+            <button class="filter-chip" data-profile="pistache" aria-pressed="false">Pistache</button>
+            <button class="filter-chip" data-profile="classicos" aria-pressed="false">Clássicos</button>
+            <button class="filter-chip" data-profile="premium" aria-pressed="false">Premium</button>
+            <button class="filter-chip" data-profile="refrescante" aria-pressed="false">Refrescantes</button>
+          </div>
+
+          <!-- Summary -->
+          <div class="filter-summary" id="filter-summary" aria-live="polite" aria-atomic="true" hidden>
+            <span id="filter-count">25 produtos</span>
+            <button class="clear-filters" id="clear-filters">Limpar filtros</button>
+          </div>
+        </div>
+
+        <!-- Grid -->
+        <div class="product-grid" id="product-grid" aria-label="Catálogo de produtos"></div>
+
+        <!-- Empty -->
+        <div class="empty-state" id="empty-state" hidden role="status">
+          <div class="empty-icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M8 11h6"/></svg>
+          </div>
+          <h3>Nenhum produto encontrado</h3>
+          <p>Tente buscar por outro termo ou limpar os filtros ativos.</p>
+          <button class="btn-secondary" id="empty-clear-btn" style="margin:0 auto">Limpar filtros</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ DESTAQUES ════════ -->
+    <section id="destaques" class="highlights" aria-labelledby="highlights-title">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Seleção especial</span>
+          <h2 class="section-title" id="highlights-title">Sabores em destaque</h2>
+          <p class="section-subtitle">Os perfis mais apreciados da nossa confeitaria para diferentes momentos</p>
+        </div>
+
+        <div class="highlights-grid">
+          <article class="highlight-card reveal reveal-delay-1">
+            <div class="highlight-visual" style="background: linear-gradient(145deg, #E4EED8 0%, #88B060 100%);" aria-hidden="true">🌿</div>
+            <div class="highlight-body">
+              <span class="highlight-tag">Tendência Premium</span>
+              <h3>Pistache — o favorito do momento</h3>
+              <p>O sabor mais requisitado da confeitaria contemporânea. Disponível em bombons, brigadeiros e palhas italianas, o pistache conquista pela cor vibrante, aroma inconfundível e sabor sofisticado.</p>
+            </div>
+          </article>
+
+          <article class="highlight-card reveal reveal-delay-2">
+            <div class="highlight-visual" style="background: linear-gradient(145deg, #FAE6E8 0%, #E09898 100%);" aria-hidden="true">🍓</div>
+            <div class="highlight-body">
+              <span class="highlight-tag">Frescor & Leveza</span>
+              <h3>Frutas — elegância e naturalidade</h3>
+              <p>Para quem busca leveza sem abrir mão da sofisticação. Copinhos de morango e uva, tartelettes e bombons de frutas vermelhas trazem frescor e cor à mesa de doces.</p>
+            </div>
+          </article>
+
+          <article class="highlight-card reveal reveal-delay-3">
+            <div class="highlight-visual" style="background: linear-gradient(145deg, #F0E0D0 0%, #7A4020 100%);" aria-hidden="true">🍫</div>
+            <div class="highlight-body">
+              <span class="highlight-tag">Clássico Premium</span>
+              <h3>Chocolate Belga — o eterno favorito</h3>
+              <p>Da tradição ao gourmet. O brigadeiro de chocolate belga e o mini brownie com ganache são escolhas certeiras para qualquer tipo de evento — elegantes, deliciosos e de alta aceitação.</p>
+            </div>
+          </article>
+
+          <article class="highlight-card reveal reveal-delay-4">
+            <div class="highlight-visual" style="background: linear-gradient(145deg, #EED8F0 0%, #904870 100%);" aria-hidden="true">✨</div>
+            <div class="highlight-body">
+              <span class="highlight-tag">Mesa Gourmet</span>
+              <h3>Copinhos & Tartelettes — impacto visual</h3>
+              <p>As peças mais sofisticadas visualmente. Copinhos de caramelo salgado com mousse e tartelettes de frutas do bosque são as estrelas de qualquer mesa de doces para eventos de alto padrão.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════ FAQ ════════ -->
+    <section id="duvidas" class="faq" aria-labelledby="faq-title">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Perguntas frequentes</span>
+          <h2 class="section-title" id="faq-title">Dúvidas comuns</h2>
+        </div>
+
+        <div class="faq-list reveal" role="list">
+
+          <div class="faq-item" role="listitem">
+            <button class="faq-question" aria-expanded="false" aria-controls="faq-1">
+              Posso montar uma seleção personalizada de doces?
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="faq-answer" id="faq-1" role="region">
+              <div class="faq-answer-inner">
+                <p>Sim! Você pode usar o catálogo digital para selecionar os doces de seu interesse e enviar sua lista pelo WhatsApp. Nossa equipe analisará sua seleção e preparará um orçamento personalizado com as melhores combinações para o seu evento.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item" role="listitem">
+            <button class="faq-question" aria-expanded="false" aria-controls="faq-2">
+              Os doces são indicados para casamentos e eventos formais?
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="faq-answer" id="faq-2" role="region">
+              <div class="faq-answer-inner">
+                <p>Absolutamente. Nossa linha de doces foi desenvolvida com foco em eventos sofisticados. Tartelettes, copinhos, bombons e brigadeiros gourmet são ideais para mesas de casamento, bodas, formaturas, eventos corporativos e qualquer celebração que mereça um toque especial.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item" role="listitem">
+            <button class="faq-question" aria-expanded="false" aria-controls="faq-3">
+              Existe pedido mínimo para encomenda?
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="faq-answer" id="faq-3" role="region">
+              <div class="faq-answer-inner">
+                <p>Informações sobre pedido mínimo e quantidades variam conforme o tipo de produto e a data do evento. Consulte nossa equipe pelo WhatsApp para receber todas as informações sobre disponibilidade e condições de acordo com a sua necessidade.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item" role="listitem">
+            <button class="faq-question" aria-expanded="false" aria-controls="faq-4">
+              Vocês atendem eventos corporativos?
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="faq-answer" id="faq-4" role="region">
+              <div class="faq-answer-inner">
+                <p>Sim. Atendemos eventos corporativos, confraternizações, lançamentos de produto, coffee breaks sofisticados e presentes institucionais. Nossa apresentação premium e embalagem cuidadosa são ideais para representar marcas com elegância.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item" role="listitem">
+            <button class="faq-question" aria-expanded="false" aria-controls="faq-5">
+              Como faço para solicitar orçamento pelo WhatsApp?
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="faq-answer" id="faq-5" role="region">
+              <div class="faq-answer-inner">
+                <p>É simples: navegue pelo catálogo, adicione os doces de interesse à sua seleção clicando em "Tenho interesse" e, ao finalizar, clique em "Enviar seleção pelo WhatsApp". Uma mensagem será gerada automaticamente com sua lista. Você também pode clicar diretamente no botão de WhatsApp para uma conversa livre com nossa equipe.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item" role="listitem">
+            <button class="faq-question" aria-expanded="false" aria-controls="faq-6">
+              Os sabores podem variar conforme disponibilidade?
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="faq-answer" id="faq-6" role="region">
+              <div class="faq-answer-inner">
+                <p>Sim. Utilizamos ingredientes sazonais e de alta qualidade que podem ter variações de disponibilidade ao longo do ano. Recomendamos sempre confirmar a disponibilidade dos sabores escolhidos no momento do pedido. Nossa equipe indicará as melhores alternativas quando necessário.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ CTA FINAL ═════════ -->
+    <section id="orcamento" class="cta-final" aria-labelledby="cta-title">
+      <div class="container" style="position:relative;z-index:1;">
+        <span class="cta-label">Vamos começar?</span>
+        <h2 class="cta-title" id="cta-title">
+          Vamos montar uma mesa de doces inesquecível?
+        </h2>
+        <p class="cta-sub">
+          Escolha seus sabores favoritos e fale com nossa equipe para criar uma seleção sob medida para o seu evento especial.
+        </p>
+        <div class="cta-actions">
+          <a href="#" id="cta-whatsapp-btn" class="btn-cta-primary" target="_blank" rel="noopener noreferrer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+            </svg>
+            Falar no WhatsApp
+          </a>
+          <a href="#produtos" class="btn-cta-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Rever catálogo
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════ FOOTER ══════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="logo">
+            <span class="logo-main">Indaiá</span>
+            <span class="logo-sub">Doces Finos</span>
+          </div>
+          <p class="footer-tagline">Confeitaria artesanal premium para eventos, casamentos e celebrações especiais. Ingredientes selecionados, apresentação impecável.</p>
+        </div>
+
+        <div>
+          <p class="footer-heading">Navegação</p>
+          <nav class="footer-links" aria-label="Links do rodapé">
+            <a href="#inicio"    class="footer-link">Início</a>
+            <a href="#produtos"  class="footer-link">Catálogo</a>
+            <a href="#destaques" class="footer-link">Destaques</a>
+            <a href="#duvidas"   class="footer-link">Dúvidas</a>
+            <a href="#orcamento" class="footer-link">Orçamento</a>
+          </nav>
+        </div>
+
+        <div>
+          <p class="footer-heading">Contato</p>
+          <div class="footer-links">
+            <a href="#" id="footer-whatsapp" class="footer-link" target="_blank" rel="noopener noreferrer">
+              WhatsApp — solicite orçamento
+            </a>
+            <span class="footer-link" style="cursor:default;">Atendimento sob consulta</span>
+            <span class="footer-link" style="cursor:default;">Encomendas com antecedência</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2025 Indaiá Doces Finos. Todos os direitos reservados.</span>
+        <span style="color:rgba(255,255,255,.35)">Confeitaria artesanal premium</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════ PRODUCT MODAL ═══════ -->
+  <div
+    id="modal-overlay"
+    class="modal-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+    aria-hidden="true"
+  >
+    <div class="modal-container" id="modal-container">
+      <button class="modal-close" id="modal-close" aria-label="Fechar detalhes do produto">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+
+      <div class="modal-visual" id="modal-visual" aria-hidden="true"></div>
+
+      <div class="modal-body">
+        <div class="modal-meta">
+          <span class="modal-category-chip" id="modal-category"></span>
+          <span class="card-separator" aria-hidden="true">·</span>
+          <span class="card-tag" id="modal-tag"></span>
+        </div>
+
+        <h2 class="modal-title" id="modal-title"></h2>
+        <p class="modal-desc" id="modal-desc"></p>
+
+        <div>
+          <p class="modal-section-label">Destaques</p>
+          <div class="modal-highlights-grid" id="modal-highlights"></div>
+        </div>
+
+        <div>
+          <p class="modal-section-label">Sugestão de uso</p>
+          <p class="modal-usage" id="modal-usage"></p>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-primary" id="modal-add-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Adicionar à seleção
+          </button>
+          <a href="#" class="btn-whatsapp" id="modal-whatsapp-btn" target="_blank" rel="noopener noreferrer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            Solicitar este doce
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ SELECTION DRAWER ════════ -->
+  <div id="drawer-overlay" class="drawer-overlay" aria-hidden="true"></div>
+
+  <div
+    id="selection-drawer"
+    class="selection-drawer"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="drawer-title"
+    aria-hidden="true"
+  >
+    <div class="drawer-header">
+      <h3 id="drawer-title">Minha seleção</h3>
+      <button class="drawer-close" id="drawer-close" aria-label="Fechar seleção">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="drawer-body">
+      <div id="drawer-items" aria-label="Doces selecionados" aria-live="polite"></div>
+
+      <div class="drawer-empty" id="drawer-empty">
+        <div class="drawer-empty-icon" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <p>Nenhum doce selecionado ainda.</p>
+        <p style="margin-top:.4rem;font-size:.8rem;">Explore o catálogo e adicione seus favoritos.</p>
+      </div>
+
+      <div class="drawer-form" id="drawer-form" hidden>
+        <h4>Informações do pedido</h4>
+        <div class="form-group">
+          <label for="form-name">Seu nome</label>
+          <input type="text" id="form-name" class="form-input" placeholder="Nome completo (opcional)">
+        </div>
+        <div class="form-group">
+          <label for="form-date">Data do evento</label>
+          <input type="date" id="form-date" class="form-input">
+        </div>
+        <div class="form-group">
+          <label for="form-guests">Estimativa de convidados</label>
+          <input type="number" id="form-guests" class="form-input" placeholder="Ex: 100" min="1">
+        </div>
+        <div class="form-group">
+          <label for="form-notes">Observações</label>
+          <textarea id="form-notes" class="form-input" placeholder="Preferências especiais, restrições alimentares, estilo do evento..." rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <button class="btn-whatsapp btn-full" id="send-whatsapp-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        Enviar seleção pelo WhatsApp
+      </button>
+      <button class="btn-clear-selection" id="clear-selection-btn">Limpar seleção</button>
+    </div>
+  </div>
+
+  <!-- Floating Action Button -->
+  <button class="fab" id="fab" aria-label="Abrir minha seleção de doces">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    Seleção
+    <span class="fab-count" id="fab-count">0</span>
+  </button>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
