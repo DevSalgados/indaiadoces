@@ -1,0 +1,30 @@
+{
+  "deleted": [
+    7
+  ],
+  "added": [
+    {
+      "id": 7,
+      "name": "Brigadeiro de Oreo",
+      "category": "brigadeiros",
+      "categoryLabel": "Brigadeiros",
+      "tag": "Favorito",
+      "tagType": "favorite",
+      "shortDesc": "Brigadeiro de chocolate branco com pedaços de biscoito Oreo. Textura crocante e sabor marcante.",
+      "fullDesc": "Brigadeiro de chocolate branco artesanal com pedaços generosos de biscoito Oreo misturados à massa cremosa. A textura crocante do biscoito contrasta com o brigadeiro aveludado, criando uma experiência sensorial encantadora e muito apreciada.",
+      "highlights": [
+        "Biscoito Oreo original incorporado",
+        "Textura crocante contrastando com o cremoso",
+        "Visual charmoso de preto e branco",
+        "Alta aceitação em todas as idades"
+      ],
+      "usage": "Sucesso garantido em festas infantis sofisticadas, eventos jovens e mesas diversificadas.",
+      "profiles": [
+        "chocolate"
+      ],
+      "gradient": "linear-gradient(145deg, #F0E0D0 0%, #C4906A 60%, #7A4020 100%)",
+      "icon": "◉",
+      "searchTerms": "brigadeiro de oreo"
+    }
+  ]
+}
