@@ -26,5 +26,8 @@
       "icon": "◉",
       "searchTerms": "brigadeiro de oreo"
     }
-  ]
+  ],
+  "heroLabels": {
+    "hero-1": "Brigadeiro Belga"
+  }
 }
