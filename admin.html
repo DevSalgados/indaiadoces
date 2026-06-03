@@ -338,11 +338,51 @@
     .badge-saved   { background: #dcfce7; color: #166534; }
     .badge-none    { background: #f1f5f9; color: #64748b; }
 
+    /* ── Hero section ────────────────────────────────────────── */
+    .hero-section-header {
+      display: flex;
+      align-items: baseline;
+      gap: .75rem;
+      margin-bottom: 1rem;
+    }
+    .hero-section-title {
+      font-family: var(--font-d);
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--brown);
+    }
+    .hero-section-sub {
+      font-size: .8rem;
+      color: var(--muted);
+    }
+    .hero-section-tag {
+      background: var(--gold-lt);
+      color: var(--brown);
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .2em .6em;
+      border-radius: 4px;
+    }
+    .hero-section-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .hero-section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0 0 2rem;
+    }
+
     /* ── Responsive ──────────────────────────────────────────── */
     @media (max-width: 600px) {
       .admin-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
       .admin-toolbar { flex-direction: column; align-items: flex-start; }
       .save-btn { width: 100%; }
+      .hero-section-grid { gap: .5rem; }
     }
   </style>
 </head>
@@ -380,12 +420,27 @@
     <div class="admin-container">
       <div class="admin-toolbar">
         <div>
-          <h2 class="toolbar-title">Fotos dos Produtos</h2>
-          <p class="toolbar-sub">Clique em qualquer produto para adicionar ou trocar a foto — depois clique em Publicar</p>
+          <h2 class="toolbar-title">Gerenciar Fotos</h2>
+          <p class="toolbar-sub">Clique em qualquer card para adicionar ou trocar a foto — depois clique em Publicar</p>
         </div>
         <button id="save-btn" class="save-btn">Publicar alterações</button>
       </div>
 
+      <!-- Vitrine inicial -->
+      <div class="hero-section-header">
+        <h3 class="hero-section-title">Vitrine Inicial</h3>
+        <span class="hero-section-tag">Página inicial</span>
+        <span class="hero-section-sub">— 3 cards de destaque</span>
+      </div>
+      <div id="hero-section" class="hero-section-grid"></div>
+
+      <hr class="hero-section-divider">
+
+      <!-- Catálogo de produtos -->
+      <div class="hero-section-header" style="margin-top:.5rem">
+        <h3 class="hero-section-title">Catálogo de Produtos</h3>
+        <span class="hero-section-sub" id="products-count-label"></span>
+      </div>
       <div id="product-grid" class="admin-grid"></div>
     </div>
   </main>

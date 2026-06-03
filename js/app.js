@@ -668,12 +668,29 @@ function init() {
   });
 }
 
+function applyHeroImages(images) {
+  document.querySelectorAll('.hero-card').forEach((card, i) => {
+    const key = `hero-${i + 1}`;
+    if (!images[key]) return;
+    const inner   = card.querySelector('.hero-card-inner');
+    const labelEl = inner ? inner.querySelector('.hero-card-label') : null;
+    const labelTxt = labelEl ? labelEl.textContent : '';
+    if (!inner) return;
+    inner.style.background = 'none';
+    inner.innerHTML = `
+      <img src="${images[key]}" alt="${labelTxt}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;">
+      <div class="hero-card-label">${labelTxt}</div>
+    `;
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   fetch('js/images.json')
     .then(r => r.ok ? r.json() : {})
     .catch(() => ({}))
     .then(images => {
       PRODUCTS.forEach(p => { if (images[p.id]) p.imageUrl = images[p.id]; });
+      applyHeroImages(images);
       init();
     });
 });

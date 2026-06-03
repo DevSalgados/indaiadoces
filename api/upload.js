@@ -66,8 +66,11 @@ module.exports = async function handler(req, res) {
 
     if (action === 'upload') {
       if (!id || !image) return res.status(400).json({ error: 'id e image são obrigatórios.' });
-      const existing = await ghGet(`images/produto-${id}.jpg`);
-      await ghPut(`images/produto-${id}.jpg`, image, existing?.sha, `Admin: foto produto ${id}`);
+      const isHero   = String(id).startsWith('hero-');
+      const filename = isHero ? `images/${id}.jpg` : `images/produto-${id}.jpg`;
+      const msg      = isHero ? `Admin: foto vitrine ${id}` : `Admin: foto produto ${id}`;
+      const existing = await ghGet(filename);
+      await ghPut(filename, image, existing?.sha, msg);
       return res.json({ ok: true });
     }
 
