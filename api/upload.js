@@ -55,13 +55,23 @@ module.exports = async function handler(req, res) {
     return r.json();
   }
 
+  const PATCH_PATH = 'js/products-patch.json';
+
   try {
     if (action === 'load') {
-      const file = await ghGet('js/images.json');
-      if (!file) return res.json({ images: {}, sha: null });
+      const [imgFile, patchFile] = await Promise.all([
+        ghGet('js/images.json'),
+        ghGet(PATCH_PATH),
+      ]);
       let imgs = {};
-      try { imgs = JSON.parse(Buffer.from(file.content.replace(/\n/g, ''), 'base64').toString('utf8')); } catch {}
-      return res.json({ images: imgs, sha: file.sha });
+      if (imgFile) {
+        try { imgs = JSON.parse(Buffer.from(imgFile.content.replace(/\n/g, ''), 'base64').toString('utf8')); } catch {}
+      }
+      let patch = { deleted: [], added: [] };
+      if (patchFile) {
+        try { patch = JSON.parse(Buffer.from(patchFile.content.replace(/\n/g, ''), 'base64').toString('utf8')); } catch {}
+      }
+      return res.json({ images: imgs, sha: imgFile?.sha || null, patch });
     }
 
     if (action === 'upload') {
@@ -80,6 +90,15 @@ module.exports = async function handler(req, res) {
       const b64      = Buffer.from(JSON.stringify(images, null, 2)).toString('base64');
       const result   = await ghPut('js/images.json', b64, existing?.sha, 'Admin: atualiza catálogo de fotos');
       return res.json({ ok: true, sha: result.content.sha });
+    }
+
+    if (action === 'save-patch') {
+      const { patch } = req.body;
+      if (!patch) return res.status(400).json({ error: 'patch é obrigatório.' });
+      const existing = await ghGet(PATCH_PATH);
+      const b64 = Buffer.from(JSON.stringify(patch, null, 2)).toString('base64');
+      await ghPut(PATCH_PATH, b64, existing?.sha, 'Admin: atualiza estrutura de produtos');
+      return res.json({ ok: true });
     }
 
     return res.status(400).json({ error: 'Ação inválida.' });

@@ -2,6 +2,7 @@ const RAW = 'https://raw.githubusercontent.com/DevSalgados/indaiadoces/main';
 
 let imagesSHA     = null;
 let currentImages = {};
+let currentPatch  = { deleted: [], added: [] };
 const pending     = {};
 
 const HERO_SLOTS = [
@@ -9,6 +10,16 @@ const HERO_SLOTS = [
   { id: 'hero-2', label: 'Pistache',             sub: 'Card 2 — Vitrine', gradient: 'linear-gradient(145deg, #EBF0E0 0%, #B8C89A 50%, #6A8040 100%)', icon: '🌿' },
   { id: 'hero-3', label: 'Tartelette Bosque',    sub: 'Card 3 — Vitrine', gradient: 'linear-gradient(145deg, #EED8EC 0%, #A060B8 50%, #683090 100%)', icon: '🫐' },
 ];
+
+const CATEGORY_GRADIENTS = {
+  bombons:              'linear-gradient(145deg, #F9EBEA 0%, #E8B4B8 60%, #C17B85 100%)',
+  brigadeiros:          'linear-gradient(145deg, #F0E0D0 0%, #C4906A 60%, #7A4020 100%)',
+  classicos:            'linear-gradient(145deg, #FBF0D8 0%, #DCAA60 60%, #A07020 100%)',
+  copinhos:             'linear-gradient(145deg, #F8EDDC 0%, #C08030 60%, #784010 100%)',
+  'mini-sobremesas':    'linear-gradient(145deg, #F0D4D8 0%, #C04860 60%, #802040 100%)',
+  'palhas-italianas':   'linear-gradient(145deg, #F4ECDC 0%, #C09848 60%, #887020 100%)',
+  tartelettes:          'linear-gradient(145deg, #EED8F0 0%, #A060B8 60%, #703090 100%)',
+};
 
 function getPassword() { return sessionStorage.getItem('admin_pw') || ''; }
 
@@ -64,6 +75,7 @@ async function loadImages() {
   const data    = await apiCall('load');
   imagesSHA     = data.sha;
   currentImages = data.images || {};
+  currentPatch  = data.patch  || { deleted: [], added: [] };
 }
 
 /* ── Render hero slots ────────────────────────────────────────── */
@@ -142,7 +154,20 @@ function renderHeroSection() {
 function renderGrid() {
   const grid = document.getElementById('product-grid');
 
-  grid.innerHTML = PRODUCTS.map(p => {
+  const baseProducts  = PRODUCTS.filter(p => !currentPatch.deleted.includes(p.id));
+  const addedProducts = currentPatch.added || [];
+  const allProducts   = [...baseProducts, ...addedProducts];
+
+  const countLabel = document.getElementById('products-count-label');
+  if (countLabel) countLabel.textContent = `— ${allProducts.length} produto${allProducts.length !== 1 ? 's' : ''}`;
+
+  if (!allProducts.length) {
+    grid.innerHTML = '<p style="color:var(--muted);padding:1rem 0;font-size:.9rem;">Nenhum produto cadastrado.</p>';
+    return;
+  }
+
+  grid.innerHTML = allProducts.map(p => {
+    const isAdded    = addedProducts.some(a => a.id === p.id);
     const hasPending = pending[p.id] !== undefined;
     const hasImage   = !!currentImages[p.id];
     const previewSrc = hasPending ? pending[p.id + '_preview'] : (currentImages[p.id] || '');
@@ -153,7 +178,7 @@ function renderGrid() {
     else               badge = '<span class="badge badge-none">Sem foto</span>';
 
     return `
-      <div class="admin-card" data-id="${p.id}">
+      <div class="admin-card" data-id="${p.id}" data-source="${isAdded ? 'added' : 'base'}">
         <div class="admin-card-visual" role="button" tabindex="0"
              title="${previewSrc ? 'Trocar foto' : 'Adicionar foto'}">
           ${previewSrc
@@ -174,6 +199,14 @@ function renderGrid() {
           ${badge}
           <p class="admin-card-name">${p.name}</p>
           <p class="admin-card-cat">${p.categoryLabel}</p>
+          <button class="delete-product-btn" data-id="${p.id}" data-source="${isAdded ? 'added' : 'base'}">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+              <path d="M10 11v6M14 11v6M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+            </svg>
+            Excluir
+          </button>
         </div>
       </div>
     `;
@@ -205,6 +238,127 @@ function renderGrid() {
       }
     });
   });
+
+  grid.querySelectorAll('.delete-product-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      deleteProduct(+btn.dataset.id, btn.dataset.source);
+    });
+  });
+}
+
+/* ── Delete product ───────────────────────────────────────────── */
+async function deleteProduct(id, source) {
+  const list    = source === 'added' ? currentPatch.added : PRODUCTS;
+  const product = list.find(p => p.id === id);
+  const name    = product?.name || 'este produto';
+
+  if (!confirm(`Excluir "${name}"?\n\nEsta ação é irreversível.`)) return;
+
+  const newPatch = { deleted: [...currentPatch.deleted], added: [...currentPatch.added] };
+  if (source === 'added') {
+    newPatch.added = newPatch.added.filter(p => p.id !== id);
+  } else {
+    if (!newPatch.deleted.includes(id)) newPatch.deleted.push(id);
+  }
+
+  setSaving(true);
+  showStatus('Excluindo produto…', 'info');
+  try {
+    await apiCall('save-patch', { patch: newPatch });
+    currentPatch = newPatch;
+    if (pending[id]) { URL.revokeObjectURL(pending[id + '_preview']); delete pending[id]; delete pending[id + '_preview']; }
+    showStatus(`✓ "${name}" excluído.`, 'success');
+    renderGrid();
+    updateSaveBtn();
+  } catch (err) {
+    showStatus(`Erro: ${err.message}`, 'error');
+  } finally {
+    setSaving(false);
+  }
+}
+
+/* ── Add product ──────────────────────────────────────────────── */
+function nextProductId() {
+  const ids = [...PRODUCTS.map(p => p.id), ...currentPatch.added.map(p => p.id)].filter(Number.isFinite);
+  return ids.length ? Math.max(...ids) + 1 : 26;
+}
+
+function openAddModal() {
+  const overlay = document.getElementById('add-modal-overlay');
+  document.getElementById('add-product-form').reset();
+  document.getElementById('add-form-error').hidden = true;
+  overlay.hidden = false;
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.querySelector('#add-product-form [name="name"]').focus(), 50);
+}
+
+function closeAddModal() {
+  document.getElementById('add-modal-overlay').hidden = true;
+  document.body.style.overflow = '';
+}
+
+async function saveNewProduct(e) {
+  e.preventDefault();
+  const form    = document.getElementById('add-product-form');
+  const get     = n => form.querySelector(`[name="${n}"]`).value.trim();
+  const checked = n => [...form.querySelectorAll(`[name="${n}"]:checked`)].map(el => el.value);
+  const errEl   = document.getElementById('add-form-error');
+
+  const name      = get('name');
+  const category  = get('category');
+  const tag       = get('tag');
+  const tagType   = get('tagType');
+  const shortDesc = get('shortDesc');
+  const fullDesc  = get('fullDesc') || shortDesc;
+  const usage     = get('usage');
+  const icon      = get('icon') || '◈';
+  const profiles  = checked('profiles');
+  const highlights = [get('h1'), get('h2'), get('h3'), get('h4')].filter(Boolean);
+
+  if (!name || !category || !tag || !tagType || !shortDesc || !highlights.length) {
+    errEl.textContent = 'Preencha todos os campos obrigatórios (*).';
+    errEl.hidden = false;
+    return;
+  }
+  errEl.hidden = true;
+
+  const newProduct = {
+    id:            nextProductId(),
+    name,
+    category,
+    categoryLabel: (CATEGORIES.find(c => c.id === category) || {}).label || category,
+    tag,
+    tagType,
+    shortDesc,
+    fullDesc,
+    highlights,
+    usage,
+    profiles,
+    gradient:    CATEGORY_GRADIENTS[category] || 'linear-gradient(145deg, #F0E0D0 0%, #C4906A 60%, #7A4020 100%)',
+    icon,
+    searchTerms: name.toLowerCase(),
+  };
+
+  const newPatch = { deleted: [...currentPatch.deleted], added: [...currentPatch.added, newProduct] };
+  const btn = document.getElementById('add-save-btn');
+  btn.disabled = true;
+  btn.textContent = 'Salvando…';
+
+  try {
+    await apiCall('save-patch', { patch: newPatch });
+    currentPatch = newPatch;
+    closeAddModal();
+    showStatus(`✓ "${name}" adicionado ao catálogo.`, 'success');
+    renderGrid();
+    updateSaveBtn();
+  } catch (err) {
+    errEl.textContent = `Erro ao salvar: ${err.message}`;
+    errEl.hidden = false;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Adicionar produto';
+  }
 }
 
 function updateSaveBtn() {
@@ -288,8 +442,6 @@ async function login() {
     document.getElementById('auth-screen').hidden  = true;
     document.getElementById('main-content').hidden = false;
     document.getElementById('logout-btn').hidden   = false;
-    const countLabel = document.getElementById('products-count-label');
-    if (countLabel) countLabel.textContent = `— ${PRODUCTS.length} produtos`;
     renderHeroSection();
     renderGrid();
     updateSaveBtn();
@@ -326,6 +478,16 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.getElementById('save-btn').addEventListener('click', save);
   document.getElementById('logout-btn').addEventListener('click', logout);
+  document.getElementById('add-product-btn').addEventListener('click', openAddModal);
+  document.getElementById('add-modal-close').addEventListener('click', closeAddModal);
+  document.getElementById('add-cancel-btn').addEventListener('click', closeAddModal);
+  document.getElementById('add-product-form').addEventListener('submit', saveNewProduct);
+  document.getElementById('add-modal-overlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeAddModal();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !document.getElementById('add-modal-overlay').hidden) closeAddModal();
+  });
 
   if (getPassword()) {
     document.getElementById('token-input').value = getPassword();

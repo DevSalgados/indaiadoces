@@ -377,6 +377,191 @@
       margin: 0 0 2rem;
     }
 
+    /* ── Delete button ───────────────────────────────────────── */
+    .delete-product-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .3rem;
+      margin-top: .45rem;
+      background: none;
+      border: 1px solid #fecaca;
+      color: #dc2626;
+      font-family: var(--font-b);
+      font-size: .7rem;
+      font-weight: 600;
+      padding: .25rem .5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      transition: background .15s, border-color .15s;
+    }
+    .delete-product-btn:hover { background: #fef2f2; border-color: #dc2626; }
+
+    /* ── Add product button ──────────────────────────────────── */
+    .add-product-btn {
+      margin-left: auto;
+      background: var(--brown);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: .4rem 1rem;
+      font-family: var(--font-b);
+      font-size: .82rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background .2s;
+    }
+    .add-product-btn:hover { background: #6b3d24; }
+
+    /* ── Add product modal ───────────────────────────────────── */
+    .add-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .add-modal-card {
+      background: #fff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 620px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    }
+    .add-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .add-modal-title {
+      font-family: var(--font-d);
+      font-size: 1.6rem;
+      font-weight: 400;
+    }
+    .add-modal-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      padding: .3rem;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      transition: color .2s;
+    }
+    .add-modal-close:hover { color: var(--brown); }
+    .add-modal-body {
+      padding: 1.25rem 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .add-modal-footer {
+      display: flex;
+      gap: .75rem;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+      justify-content: flex-end;
+    }
+    .add-cancel-btn {
+      background: none;
+      border: 1.5px solid var(--border);
+      color: var(--brown);
+      font-family: var(--font-b);
+      font-size: .88rem;
+      font-weight: 600;
+      padding: .6rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color .2s;
+    }
+    .add-cancel-btn:hover { border-color: var(--brown); }
+    .add-save-btn {
+      background: var(--brown);
+      color: #fff;
+      border: none;
+      font-family: var(--font-b);
+      font-size: .88rem;
+      font-weight: 700;
+      padding: .6rem 1.4rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .add-save-btn:hover { background: #6b3d24; }
+    .add-save-btn:disabled { opacity: .6; cursor: not-allowed; }
+    .add-form-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border-radius: 6px;
+      padding: .6rem .9rem;
+      font-size: .82rem;
+      margin-bottom: .75rem;
+    }
+    .add-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+      margin-bottom: .75rem;
+    }
+    .add-form-full { grid-column: 1 / -1; }
+    .add-form-label {
+      display: block;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .3rem;
+    }
+    .add-form-input {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      padding: .55rem .75rem;
+      font-family: var(--font-b);
+      font-size: .88rem;
+      color: var(--brown);
+      background: var(--cream);
+      outline: none;
+      transition: border-color .2s;
+      resize: vertical;
+    }
+    .add-form-input:focus { border-color: var(--gold); }
+    .add-form-section {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: .25rem 0 .5rem;
+    }
+    .add-form-profiles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem .75rem;
+      margin-bottom: .75rem;
+    }
+    .add-form-checkbox {
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+      font-size: .82rem;
+      color: var(--brown);
+      cursor: pointer;
+    }
+
     /* ── Responsive ──────────────────────────────────────────── */
     @media (max-width: 600px) {
       .admin-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
@@ -440,10 +625,119 @@
       <div class="hero-section-header" style="margin-top:.5rem">
         <h3 class="hero-section-title">Catálogo de Produtos</h3>
         <span class="hero-section-sub" id="products-count-label"></span>
+        <button id="add-product-btn" class="add-product-btn">+ Adicionar produto</button>
       </div>
       <div id="product-grid" class="admin-grid"></div>
     </div>
   </main>
+
+  <!-- ── Modal: Adicionar produto ──────────────────────────── -->
+  <div id="add-modal-overlay" class="add-modal-overlay" hidden>
+    <div class="add-modal-card" role="dialog" aria-modal="true" aria-labelledby="add-modal-title">
+      <div class="add-modal-header">
+        <h2 class="add-modal-title" id="add-modal-title">Novo Produto</h2>
+        <button id="add-modal-close" class="add-modal-close" aria-label="Fechar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="add-modal-body">
+        <p id="add-form-error" class="add-form-error" hidden></p>
+        <form id="add-product-form" novalidate>
+
+          <div class="add-form-row">
+            <div class="add-form-full">
+              <label class="add-form-label" for="af-name">Nome do produto *</label>
+              <input id="af-name" type="text" name="name" class="add-form-input" placeholder="Ex: Brigadeiro de Pistache">
+            </div>
+          </div>
+
+          <div class="add-form-row">
+            <div>
+              <label class="add-form-label" for="af-category">Categoria *</label>
+              <select id="af-category" name="category" class="add-form-input">
+                <option value="">Selecione…</option>
+                <option value="bombons">Bombons</option>
+                <option value="brigadeiros">Brigadeiros</option>
+                <option value="classicos">Clássicos</option>
+                <option value="copinhos">Copinhos</option>
+                <option value="mini-sobremesas">Mini Sobremesas</option>
+                <option value="palhas-italianas">Palhas Italianas</option>
+                <option value="tartelettes">Tartelettes</option>
+              </select>
+            </div>
+            <div>
+              <label class="add-form-label" for="af-icon">Ícone / Emoji</label>
+              <input id="af-icon" type="text" name="icon" class="add-form-input" placeholder="◈" maxlength="4">
+            </div>
+          </div>
+
+          <div class="add-form-row">
+            <div>
+              <label class="add-form-label" for="af-tag">Tag de destaque *</label>
+              <input id="af-tag" type="text" name="tag" class="add-form-input" placeholder="Ex: Premium, Novo">
+            </div>
+            <div>
+              <label class="add-form-label" for="af-tagtype">Estilo da tag *</label>
+              <select id="af-tagtype" name="tagType" class="add-form-input">
+                <option value="">Selecione…</option>
+                <option value="premium">Premium</option>
+                <option value="trend">Tendência</option>
+                <option value="classic">Clássico / Tradicional</option>
+                <option value="refresh">Refrescante</option>
+                <option value="artisan">Artesanal</option>
+                <option value="elegant">Sofisticado</option>
+                <option value="favorite">Favorito</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="add-form-row">
+            <div class="add-form-full">
+              <label class="add-form-label" for="af-short">Descrição curta *</label>
+              <textarea id="af-short" name="shortDesc" class="add-form-input" rows="2" placeholder="Uma frase que resume o produto…"></textarea>
+            </div>
+          </div>
+
+          <div class="add-form-row">
+            <div class="add-form-full">
+              <label class="add-form-label" for="af-full">Descrição completa <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
+              <textarea id="af-full" name="fullDesc" class="add-form-input" rows="3" placeholder="Detalhes sobre ingredientes, preparo e diferenciais…"></textarea>
+            </div>
+          </div>
+
+          <div class="add-form-section">Destaques <span style="font-weight:400;font-size:.7rem;color:var(--muted)">(mínimo 1 *)</span></div>
+          <div class="add-form-row">
+            <div><input type="text" name="h1" class="add-form-input" placeholder="Destaque 1 *"></div>
+            <div><input type="text" name="h2" class="add-form-input" placeholder="Destaque 2"></div>
+            <div><input type="text" name="h3" class="add-form-input" placeholder="Destaque 3"></div>
+            <div><input type="text" name="h4" class="add-form-input" placeholder="Destaque 4"></div>
+          </div>
+
+          <div class="add-form-row">
+            <div class="add-form-full">
+              <label class="add-form-label" for="af-usage">Uso ideal <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
+              <textarea id="af-usage" name="usage" class="add-form-input" rows="2" placeholder="Ex: Ideal para casamentos e eventos sofisticados…"></textarea>
+            </div>
+          </div>
+
+          <div class="add-form-section">Perfis de sabor <span style="font-weight:400;font-size:.7rem;color:var(--muted)">(opcional)</span></div>
+          <div class="add-form-profiles">
+            <label class="add-form-checkbox"><input type="checkbox" name="profiles" value="chocolate"> Chocolate</label>
+            <label class="add-form-checkbox"><input type="checkbox" name="profiles" value="frutas"> Frutas</label>
+            <label class="add-form-checkbox"><input type="checkbox" name="profiles" value="pistache"> Pistache</label>
+            <label class="add-form-checkbox"><input type="checkbox" name="profiles" value="classicos"> Clássicos</label>
+            <label class="add-form-checkbox"><input type="checkbox" name="profiles" value="premium"> Premium</label>
+            <label class="add-form-checkbox"><input type="checkbox" name="profiles" value="refrescante"> Refrescantes</label>
+          </div>
+
+        </form>
+      </div>
+      <div class="add-modal-footer">
+        <button type="button" id="add-cancel-btn" class="add-cancel-btn">Cancelar</button>
+        <button type="submit" form="add-product-form" id="add-save-btn" class="add-save-btn">Adicionar produto</button>
+      </div>
+    </div>
+  </div>
 
   <script src="js/data.js"></script>
   <script src="js/admin.js"></script>

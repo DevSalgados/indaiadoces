@@ -685,12 +685,19 @@ function applyHeroImages(images) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  fetch('js/images.json')
-    .then(r => r.ok ? r.json() : {})
-    .catch(() => ({}))
-    .then(images => {
-      PRODUCTS.forEach(p => { if (images[p.id]) p.imageUrl = images[p.id]; });
-      applyHeroImages(images);
-      init();
-    });
+  Promise.all([
+    fetch('js/images.json').then(r => r.ok ? r.json() : {}).catch(() => ({})),
+    fetch('js/products-patch.json').then(r => r.ok ? r.json() : null).catch(() => null),
+  ]).then(([images, patch]) => {
+    if (patch) {
+      (patch.deleted || []).forEach(id => {
+        const idx = PRODUCTS.findIndex(p => p.id === id);
+        if (idx !== -1) PRODUCTS.splice(idx, 1);
+      });
+      (patch.added || []).forEach(p => PRODUCTS.push(p));
+    }
+    PRODUCTS.forEach(p => { if (images[p.id]) p.imageUrl = images[p.id]; });
+    applyHeroImages(images);
+    init();
+  });
 });
