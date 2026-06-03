@@ -524,9 +524,10 @@ async function save() {
       const isHero = String(id).startsWith('hero-');
       showStatus(`Enviando foto ${i + 1} de ${ids.length}…`, 'info');
       await apiCall('upload', { id, image: pending[id] });
+      const v = Date.now();
       newImages[id] = isHero
-        ? `${RAW}/images/${id}.jpg`
-        : `${RAW}/images/produto-${id}.jpg`;
+        ? `${RAW}/images/${id}.jpg?v=${v}`
+        : `${RAW}/images/produto-${id}.jpg?v=${v}`;
     }
 
     showStatus('Atualizando catálogo…', 'info');
