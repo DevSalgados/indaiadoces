@@ -216,7 +216,7 @@ function updateSaveBtn() {
 
 /* ── Save ─────────────────────────────────────────────────────── */
 async function save() {
-  const ids = Object.keys(pending).filter(k => !k.includes('_preview')).map(Number);
+  const ids = Object.keys(pending).filter(k => !k.includes('_preview'));
   if (!ids.length) { showStatus('Nenhuma alteração pendente.', 'info'); return; }
 
   setSaving(true);
