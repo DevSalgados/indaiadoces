@@ -668,14 +668,19 @@ function init() {
   });
 }
 
-function applyHeroImages(images) {
+function applyHeroImages(images, heroLabels) {
   document.querySelectorAll('.hero-card').forEach((card, i) => {
-    const key = `hero-${i + 1}`;
-    if (!images[key]) return;
-    const inner   = card.querySelector('.hero-card-inner');
-    const labelEl = inner ? inner.querySelector('.hero-card-label') : null;
-    const labelTxt = labelEl ? labelEl.textContent : '';
+    const key    = `hero-${i + 1}`;
+    const inner  = card.querySelector('.hero-card-inner');
     if (!inner) return;
+    const labelEl  = inner.querySelector('.hero-card-label');
+    const labelTxt = (heroLabels && heroLabels[key]) || (labelEl ? labelEl.textContent : '');
+
+    if (labelEl && heroLabels && heroLabels[key]) {
+      labelEl.textContent = heroLabels[key];
+    }
+
+    if (!images[key]) return;
     inner.style.background = 'none';
     inner.innerHTML = `
       <img src="${images[key]}" alt="${labelTxt}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;">
@@ -697,7 +702,7 @@ document.addEventListener('DOMContentLoaded', () => {
       (patch.added || []).forEach(p => PRODUCTS.push(p));
     }
     PRODUCTS.forEach(p => { if (images[p.id]) p.imageUrl = images[p.id]; });
-    applyHeroImages(images);
+    applyHeroImages(images, patch?.heroLabels);
     init();
   });
 });

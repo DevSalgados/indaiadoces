@@ -2,7 +2,7 @@ const RAW = 'https://raw.githubusercontent.com/DevSalgados/indaiadoces/main';
 
 let imagesSHA     = null;
 let currentImages = {};
-let currentPatch  = { deleted: [], added: [] };
+let currentPatch  = { deleted: [], added: [], heroLabels: {} };
 const pending     = {};
 
 const HERO_SLOTS = [
@@ -75,7 +75,8 @@ async function loadImages() {
   const data    = await apiCall('load');
   imagesSHA     = data.sha;
   currentImages = data.images || {};
-  currentPatch  = data.patch  || { deleted: [], added: [] };
+  currentPatch  = data.patch  || { deleted: [], added: [], heroLabels: {} };
+  if (!currentPatch.heroLabels) currentPatch.heroLabels = {};
 }
 
 /* ── Render hero slots ────────────────────────────────────────── */
@@ -84,11 +85,10 @@ function renderHeroSection() {
   if (!container) return;
 
   container.innerHTML = HERO_SLOTS.map(slot => {
-    const hasPending = pending[slot.id] !== undefined;
-    const hasImage   = !!currentImages[slot.id];
-    const previewSrc = hasPending
-      ? pending[slot.id + '_preview']
-      : (currentImages[slot.id] || '');
+    const hasPending   = pending[slot.id] !== undefined;
+    const hasImage     = !!currentImages[slot.id];
+    const previewSrc   = hasPending ? pending[slot.id + '_preview'] : (currentImages[slot.id] || '');
+    const currentLabel = (currentPatch.heroLabels || {})[slot.id] || slot.label;
 
     let badge = '';
     if (hasPending)    badge = '<span class="badge badge-pending">● Pendente</span>';
@@ -100,7 +100,7 @@ function renderHeroSection() {
         <div class="admin-card-visual" role="button" tabindex="0"
              title="${previewSrc ? 'Trocar foto' : 'Adicionar foto'}">
           ${previewSrc
-            ? `<img src="${previewSrc}" alt="${slot.label}" class="admin-card-img">`
+            ? `<img src="${previewSrc}" alt="${currentLabel}" class="admin-card-img">`
             : `<div class="admin-card-placeholder" style="background:${slot.gradient}">${slot.icon}</div>`
           }
           <div class="admin-card-overlay">
@@ -115,7 +115,15 @@ function renderHeroSection() {
         </div>
         <div class="admin-card-info">
           ${badge}
-          <p class="admin-card-name">${slot.label}</p>
+          <div class="hero-label-row">
+            <p class="admin-card-name">${currentLabel}</p>
+            <button class="hero-edit-name-btn" data-slotid="${slot.id}" title="Editar nome do card">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+          </div>
           <p class="admin-card-cat">${slot.sub}</p>
         </div>
       </div>
@@ -146,6 +154,13 @@ function renderHeroSection() {
       } catch (err) {
         showStatus(`Erro ao processar imagem: ${err.message}`, 'error');
       }
+    });
+  });
+
+  container.querySelectorAll('.hero-edit-name-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      startHeroLabelEdit(btn);
     });
   });
 }
@@ -261,6 +276,58 @@ function renderGrid() {
       deleteProduct(+btn.dataset.id, btn.dataset.source);
     });
   });
+}
+
+/* ── Hero label edit ─────────────────────────────────────────── */
+function startHeroLabelEdit(btn) {
+  const slotId       = btn.dataset.slotid;
+  const currentLabel = (currentPatch.heroLabels || {})[slotId] || HERO_SLOTS.find(s => s.id === slotId)?.label || '';
+  const row          = btn.closest('.hero-label-row');
+
+  row.innerHTML = `
+    <input class="hero-label-input" type="text" value="${currentLabel.replace(/"/g, '&quot;')}" maxlength="40">
+    <button class="hero-label-save" title="Salvar">✓</button>
+    <button class="hero-label-cancel" title="Cancelar">✗</button>
+  `;
+
+  const input     = row.querySelector('.hero-label-input');
+  const saveBtn   = row.querySelector('.hero-label-save');
+  const cancelBtn = row.querySelector('.hero-label-cancel');
+
+  input.focus();
+  input.select();
+
+  const doSave = async () => {
+    const newLabel = input.value.trim();
+    if (!newLabel) { input.focus(); return; }
+    await saveHeroLabel(slotId, newLabel);
+  };
+
+  saveBtn.addEventListener('click', doSave);
+  cancelBtn.addEventListener('click', () => renderHeroSection());
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter')  { e.preventDefault(); doSave(); }
+    if (e.key === 'Escape') { e.preventDefault(); renderHeroSection(); }
+  });
+}
+
+async function saveHeroLabel(slotId, label) {
+  const newPatch = {
+    ...currentPatch,
+    heroLabels: { ...(currentPatch.heroLabels || {}), [slotId]: label },
+  };
+  setSaving(true);
+  showStatus('Salvando nome do card…', 'info');
+  try {
+    await apiCall('save-patch', { patch: newPatch });
+    currentPatch = newPatch;
+    showStatus('✓ Nome do card atualizado.', 'success');
+  } catch (err) {
+    showStatus(`Erro: ${err.message}`, 'error');
+  } finally {
+    setSaving(false);
+    renderHeroSection();
+  }
 }
 
 /* ── Delete product ───────────────────────────────────────────── */

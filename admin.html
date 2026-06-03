@@ -568,6 +568,58 @@
       cursor: pointer;
     }
 
+    /* ── Hero label inline edit ──────────────────────────────── */
+    .hero-label-row {
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+      margin-bottom: .15rem;
+    }
+    .hero-label-row .admin-card-name { margin-bottom: 0; }
+    .hero-edit-name-btn {
+      flex-shrink: 0;
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      padding: .1rem;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      opacity: 0;
+      transition: opacity .2s, color .2s;
+    }
+    .admin-card:hover .hero-edit-name-btn { opacity: 1; }
+    .hero-edit-name-btn:hover { color: var(--brown); }
+    .hero-label-input {
+      flex: 1;
+      min-width: 0;
+      border: 1.5px solid var(--gold);
+      border-radius: 4px;
+      padding: .2rem .4rem;
+      font-family: var(--font-b);
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--brown);
+      background: var(--cream);
+      outline: none;
+    }
+    .hero-label-save,
+    .hero-label-cancel {
+      flex-shrink: 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: .88rem;
+      padding: .1rem .2rem;
+      border-radius: 3px;
+      line-height: 1;
+    }
+    .hero-label-save  { color: var(--green); }
+    .hero-label-cancel { color: var(--red); }
+    .hero-label-save:hover  { background: #dcfce7; }
+    .hero-label-cancel:hover { background: #fee2e2; }
+
     /* ── Responsive ──────────────────────────────────────────── */
     @media (max-width: 600px) {
       .admin-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
