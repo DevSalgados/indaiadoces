@@ -199,14 +199,23 @@ function renderGrid() {
           ${badge}
           <p class="admin-card-name">${p.name}</p>
           <p class="admin-card-cat">${p.categoryLabel}</p>
-          <button class="delete-product-btn" data-id="${p.id}" data-source="${isAdded ? 'added' : 'base'}">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-              <polyline points="3 6 5 6 21 6"/>
-              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-              <path d="M10 11v6M14 11v6M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-            </svg>
-            Excluir
-          </button>
+          <div class="product-card-actions">
+            <button class="edit-product-btn" data-id="${p.id}" data-source="${isAdded ? 'added' : 'base'}">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+              Editar
+            </button>
+            <button class="delete-product-btn" data-id="${p.id}" data-source="${isAdded ? 'added' : 'base'}">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                <path d="M10 11v6M14 11v6M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+              </svg>
+              Excluir
+            </button>
+          </div>
         </div>
       </div>
     `;
@@ -236,6 +245,13 @@ function renderGrid() {
       } catch (err) {
         showStatus(`Erro ao processar imagem: ${err.message}`, 'error');
       }
+    });
+  });
+
+  grid.querySelectorAll('.edit-product-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      openEditModal(+btn.dataset.id, btn.dataset.source);
     });
   });
 
@@ -287,7 +303,11 @@ function nextProductId() {
 function openAddModal() {
   const overlay = document.getElementById('add-modal-overlay');
   document.getElementById('add-product-form').reset();
-  document.getElementById('add-form-error').hidden = true;
+  document.getElementById('add-form-error').hidden   = true;
+  document.getElementById('add-modal-edit-id').value = '';
+  document.getElementById('add-modal-edit-source').value = '';
+  document.getElementById('add-modal-title').textContent = 'Novo Produto';
+  document.getElementById('add-save-btn').textContent    = 'Adicionar produto';
   overlay.hidden = false;
   document.body.style.overflow = 'hidden';
   setTimeout(() => document.querySelector('#add-product-form [name="name"]').focus(), 50);
@@ -296,6 +316,42 @@ function openAddModal() {
 function closeAddModal() {
   document.getElementById('add-modal-overlay').hidden = true;
   document.body.style.overflow = '';
+}
+
+function openEditModal(id, source) {
+  const list    = source === 'added' ? currentPatch.added : PRODUCTS;
+  const product = list.find(p => p.id === id);
+  if (!product) return;
+
+  const form = document.getElementById('add-product-form');
+  form.reset();
+
+  document.getElementById('add-modal-edit-id').value     = id;
+  document.getElementById('add-modal-edit-source').value = source;
+  document.getElementById('add-modal-title').textContent  = 'Editar Produto';
+  document.getElementById('add-save-btn').textContent     = 'Salvar alterações';
+  document.getElementById('add-form-error').hidden        = true;
+
+  form.querySelector('[name="name"]').value     = product.name      || '';
+  form.querySelector('[name="category"]').value = product.category  || '';
+  form.querySelector('[name="icon"]').value     = product.icon      || '';
+  form.querySelector('[name="tag"]').value      = product.tag       || '';
+  form.querySelector('[name="tagType"]').value  = product.tagType   || '';
+  form.querySelector('[name="shortDesc"]').value = product.shortDesc || '';
+  form.querySelector('[name="fullDesc"]').value  = product.fullDesc  || '';
+  form.querySelector('[name="h1"]').value = (product.highlights || [])[0] || '';
+  form.querySelector('[name="h2"]').value = (product.highlights || [])[1] || '';
+  form.querySelector('[name="h3"]').value = (product.highlights || [])[2] || '';
+  form.querySelector('[name="h4"]').value = (product.highlights || [])[3] || '';
+  form.querySelector('[name="usage"]').value = product.usage || '';
+
+  form.querySelectorAll('[name="profiles"]').forEach(cb => {
+    cb.checked = (product.profiles || []).includes(cb.value);
+  });
+
+  document.getElementById('add-modal-overlay').hidden = false;
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => form.querySelector('[name="name"]').focus(), 50);
 }
 
 async function saveNewProduct(e) {
@@ -323,8 +379,13 @@ async function saveNewProduct(e) {
   }
   errEl.hidden = true;
 
-  const newProduct = {
-    id:            nextProductId(),
+  const rawEditId  = document.getElementById('add-modal-edit-id').value;
+  const editId     = rawEditId ? +rawEditId : null;
+  const editSource = document.getElementById('add-modal-edit-source').value;
+  const isEdit     = editId !== null && !isNaN(editId);
+
+  const product = {
+    id:            isEdit ? editId : nextProductId(),
     name,
     category,
     categoryLabel: (CATEGORIES.find(c => c.id === category) || {}).label || category,
@@ -340,24 +401,38 @@ async function saveNewProduct(e) {
     searchTerms: name.toLowerCase(),
   };
 
-  const newPatch = { deleted: [...currentPatch.deleted], added: [...currentPatch.added, newProduct] };
+  let newPatch;
+  if (isEdit && editSource === 'added') {
+    newPatch = {
+      deleted: [...currentPatch.deleted],
+      added:   currentPatch.added.map(p => p.id === editId ? product : p),
+    };
+  } else if (isEdit) {
+    const deletedIds = currentPatch.deleted.includes(editId)
+      ? [...currentPatch.deleted]
+      : [...currentPatch.deleted, editId];
+    newPatch = { deleted: deletedIds, added: [...currentPatch.added, product] };
+  } else {
+    newPatch = { deleted: [...currentPatch.deleted], added: [...currentPatch.added, product] };
+  }
+
   const btn = document.getElementById('add-save-btn');
-  btn.disabled = true;
+  btn.disabled    = true;
   btn.textContent = 'Salvando…';
 
   try {
     await apiCall('save-patch', { patch: newPatch });
     currentPatch = newPatch;
     closeAddModal();
-    showStatus(`✓ "${name}" adicionado ao catálogo.`, 'success');
+    showStatus(`✓ "${name}" ${isEdit ? 'atualizado' : 'adicionado ao catálogo'}.`, 'success');
     renderGrid();
     updateSaveBtn();
   } catch (err) {
     errEl.textContent = `Erro ao salvar: ${err.message}`;
     errEl.hidden = false;
   } finally {
-    btn.disabled = false;
-    btn.textContent = 'Adicionar produto';
+    btn.disabled    = false;
+    btn.textContent = isEdit ? 'Salvar alterações' : 'Adicionar produto';
   }
 }
 
